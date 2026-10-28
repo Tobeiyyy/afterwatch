@@ -127,11 +127,17 @@ On the Obsidian and Markdown targets, `afterwatch add` and `afterwatch backfill 
 
 ### Discord bot
 
-1. Create a bot in the [Discord Developer Portal](https://discord.com/developers/applications), enable the **Message Content** intent, and invite it to your server.
-2. In `afterwatch settings` → **Bot**, paste the bot token and the channel ID.
-3. `afterwatch bot`
+Afterwatch doesn't come with a bot account: you create your own bot once (free, a few minutes) and it runs on your computer. It only works while `afterwatch bot` is running, so it suits a PC or small server that stays on.
 
-The bot works through links posted in that channel, including messages from the last 14 days that it hasn't answered yet, and reacts with ✅, ♻️ (already a note) or ❌.
+1. **Create the bot.** In the [Discord Developer Portal](https://discord.com/developers/applications), create a new application, give it a name and press **Create** ([Discord's guide](https://docs.discord.com/developers/quick-start/getting-started)).
+2. **Copy the token.** On the **Bot** page, under **Token**, click **Reset Token** and copy it. Discord shows it only once.
+3. **Let it read messages.** On the same **Bot** page, switch on the privileged intent for message content. Without it the bot sees messages but not the links in them.
+4. **Invite it to your server.** On the **Installation** page, under **Guild Install**, add the `bot` scope and give it the permissions **View Channels**, **Send Messages**, **Read Message History** and **Add Reactions**. Open the **Install Link** and add the bot to your server.
+5. **Copy the channel ID.** In Discord, turn on Developer Mode (User Settings → Advanced), then right-click the channel the bot should watch and click **Copy Channel ID** ([Discord support](https://support.discord.com/hc/articles/206346498)).
+6. In `afterwatch settings` → **Bot**, paste the token and the channel ID, then **Save**.
+7. Run `afterwatch bot`.
+
+Paste YouTube links into that channel and the bot writes the notes, replies with the result and reacts with ✅, ♻️ (already a note) or ❌. On start it also catches up on links from the last 14 days that it hasn't answered yet. Once a week it updates the hubs and posts the ones it wrote.
 
 ## Settings
 
