@@ -1,0 +1,72 @@
+# --- bytecode ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# --- virtualenvs ---
+.venv/
+venv/
+env/
+ENV/
+.python-version
+
+# --- packaging / build ---
+build/
+develop-eggs/
+dist/
+eggs/
+.eggs/
+sdist/
+wheels/
+*.egg-info/
+*.egg
+MANIFEST
+
+# --- environment / secrets ---
+.env
+.env.*
+!.env.example
+!.env.sample
+*.pem
+*.key
+*.p12
+*.pfx
+.pypirc
+
+# --- local databases ---
+*.db
+*.sqlite
+*.sqlite3
+db.sqlite3-journal
+
+# --- test / coverage / typing ---
+.pytest_cache/
+.tox/
+.nox/
+.coverage
+.coverage.*
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+.dmypy.json
+
+# --- notebooks ---
+.ipynb_checkpoints/
+
+# --- editor ---
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.swp
+
+# --- OS junk ---
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
