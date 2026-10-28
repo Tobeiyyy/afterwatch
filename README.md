@@ -2,7 +2,7 @@
 
 Turn your YouTube watching into a knowledge base. Afterwatch writes one structured note per video into your notes app, groups related notes into topic hubs that compare what different videos say, and can work through your whole watch history.
 
-![A note written by Afterwatch, open in Obsidian](docs/screenshots/note.png)
+![A note written by Afterwatch, open in Obsidian](https://raw.githubusercontent.com/Tobeiyyy/afterwatch/main/docs/screenshots/note.png)
 
 It works with any AI model that speaks the OpenAI chat API (OpenAI, Google Gemini, Anthropic, xAI Grok, DeepSeek, OpenRouter, a local Ollama) or with your own signed-in Claude Code CLI. Obsidian is the recommended home for the notes; plain Markdown, Word, text files and Notion work too.
 
@@ -24,13 +24,13 @@ A model looks at a contact sheet of the whole video and decides whether it shows
 
 Each note gets one topic: its most specific tag that at least 5 notes share. A topic of up to 15 notes becomes one hub page; bigger topics are split into themes. A hub is organised by claim: what several videos agree on, where they disagree, which take is strongest, with links to the notes each claim came from. When new notes join, the hub is rewritten after 3 of them; when it grows past 15 it is split and the old page points to the new ones. Text you write outside the generated block is never touched.
 
-![A topic hub](docs/screenshots/hub.png)
+![A topic hub](https://raw.githubusercontent.com/Tobeiyyy/afterwatch/main/docs/screenshots/hub.png)
 
 ### A reading order
 
 `afterwatch reading-order` writes one checklist note with every video note, grouped by topic and hub, with the hubs linked. Ticks you set survive the next rewrite.
 
-![The reading order note](docs/screenshots/reading-order.png)
+![The reading order note](https://raw.githubusercontent.com/Tobeiyyy/afterwatch/main/docs/screenshots/reading-order.png)
 
 ### Your whole watch history
 
@@ -40,7 +40,7 @@ Each note gets one topic: its most specific tag that at least 5 notes share. A t
 
 `afterwatch settings` opens every option in your browser: which model does which job, note length and style, language, screenshots, output, folders, hubs, backfill and the bot. It opens in dark mode; the Light mode button at the top switches it, and the choice is saved.
 
-![The settings page](docs/screenshots/settings.png)
+![The settings page](https://raw.githubusercontent.com/Tobeiyyy/afterwatch/main/docs/screenshots/settings.png)
 
 ### An optional Discord bot
 
@@ -145,7 +145,7 @@ Everything lives in one TOML file. The settings page edits it; you can also edit
 
 Set `AFTERWATCH_CONFIG` to use a different file. Only values that differ from the defaults are written.
 
-![Note and screenshot settings](docs/screenshots/settings-notes.png)
+![Note and screenshot settings](https://raw.githubusercontent.com/Tobeiyyy/afterwatch/main/docs/screenshots/settings-notes.png)
 
 | Section | Settings |
 |---|---|
