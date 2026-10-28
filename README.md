@@ -181,7 +181,9 @@ Afterwatch makes one to three calls per video: one for the note and, when screen
 
 **Google Gemini and OpenAI** work through API keys only. Signing in with a Google or ChatGPT account is not supported, because their terms don't allow third-party tools to use those sign-ins. Gemini's API has a free tier; Google may use free-tier prompts to improve its products.
 
-**DeepSeek** processes requests on servers in China. **Ollama** runs on your own computer, so nothing leaves it.
+**DeepSeek** processes requests on servers in China.
+
+**Ollama** runs on your own computer, so nothing leaves it. Raise its context length first: below 24 GB of VRAM Ollama defaults to 4k tokens, and the note instructions alone are about 6k tokens before the transcript is added. Set `OLLAMA_CONTEXT_LENGTH=32768` (or more for long videos) before starting `ollama serve`, or use the context length slider in the Ollama app ([Ollama docs](https://docs.ollama.com/context-length)). Pick a model that follows long instructions well; small models tend to drift from the note format.
 
 ## Security and privacy
 
@@ -203,6 +205,7 @@ You are responsible for following the terms of the AI provider you use. Afterwat
 Version 1.0.0.
 
 - Videos without captions can't be summarised (there is no speech-to-text).
+- Local models through Ollama are covered by tests with a mocked server but have not yet been run end to end against a real local model.
 - Notion receives notes only: no tag pages, hubs or reading order. If a Notion upload fails halfway, the half-filled page stays and a rerun creates a new one.
 - Lists nested deeper than two levels are flattened to two levels on Notion.
 - In docx and txt output, deleting a file makes Afterwatch write that video's note again.
