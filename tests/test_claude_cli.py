@@ -35,6 +35,19 @@ def test_build_command_shape():
     assert "--model" in cmd and "sonnet" in cmd
 
 
+def test_build_command_disables_all_tools_and_mcp_by_default():
+    # Transcripts are untrusted text: no Bash, Write, WebFetch or MCP tools to hijack.
+    cmd = build_command("sonnet")
+    assert cmd[cmd.index("--tools") + 1] == ""
+    assert "--strict-mcp-config" in cmd
+
+
+def test_build_command_can_allow_only_read():
+    cmd = build_command("sonnet", tools="Read")
+    assert cmd[cmd.index("--tools") + 1] == "Read"
+    assert cmd.count("--tools") == 1
+
+
 def test_child_env_strips_api_credentials(monkeypatch):
     monkeypatch.setenv("ANTHROPIC_API_KEY", "sk-secret")
     monkeypatch.setenv("ANTHROPIC_AUTH_TOKEN", "tok")

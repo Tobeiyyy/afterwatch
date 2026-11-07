@@ -24,6 +24,24 @@ def test_sanitize_filename_strips_windows_and_obsidian_chars():
     assert sanitize_filename("???") == "Untitled"
 
 
+def test_sanitize_filename_avoids_windows_reserved_names():
+    for name in ("CON", "con", "PRN", "AUX", "NUL", "COM1", "com9", "LPT1", "LPT9",
+                 "NUL.txt", "con.md", "Aux .x"):
+        out = sanitize_filename(name)
+        assert out.split(".")[0].strip().upper() not in _RESERVED_FOR_TEST, (name, out)
+        assert out  # still a usable name
+
+
+def test_sanitize_filename_keeps_names_that_only_contain_reserved_words():
+    assert sanitize_filename("Console Wars") == "Console Wars"
+    assert sanitize_filename("COM10") == "COM10"
+    assert sanitize_filename("Nullpointer") == "Nullpointer"
+
+
+_RESERVED_FOR_TEST = {"CON", "PRN", "AUX", "NUL", *(f"COM{i}" for i in range(1, 10)),
+                      *(f"LPT{i}" for i in range(1, 10))}
+
+
 def test_write_note_appends_references_iframe(vault):
     path = write_note(vault, "My Video", "dQw4w9WgXcQ", "# My Video\n\nBody")
     content = path.read_text(encoding="utf-8")

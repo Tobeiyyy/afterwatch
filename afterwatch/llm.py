@@ -52,7 +52,8 @@ def complete(task: str, prompt: str, *, system: str | None = None,
 
 def _claude_code(prompt, system, images, model) -> str:
     """The CLI takes its system prompt from a CLAUDE.md in its working directory
-    and opens image files there with its Read tool (no permission needed)."""
+    and opens image files there with its Read tool (no permission needed).
+    Read is the only tool it ever gets, and only when there are images."""
     with tempfile.TemporaryDirectory(prefix="afterwatch-") as tmp:
         work = Path(tmp)
         if system:
@@ -66,7 +67,8 @@ def _claude_code(prompt, system, images, model) -> str:
                 lines.append(f"{label} {path}")
             head = ("Use the Read tool to open each image file below, in order, before "
                     "answering.\n" + "\n".join(lines) + "\n\n")
-        return claude_cli.run_claude(head + prompt, cwd=work, model=model)
+        return claude_cli.run_claude(head + prompt, cwd=work, model=model,
+                                     tools="Read" if images else "")
 
 
 def _ext(data: bytes) -> str:

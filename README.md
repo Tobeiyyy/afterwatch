@@ -85,6 +85,20 @@ Each provider has a Test button that sends one tiny request.
 
 ## Use
 
+Before the first run, two things must be in place, or `afterwatch add` stops with an error: a notes model with its API key (see Set up), and an output folder that already exists. Afterwatch creates the subfolders inside it, not the folder itself.
+
+The cheapest way to start is a free Gemini API key from Google AI Studio (free tier, see Models and costs), or the `claude-code` provider if you already have a Claude subscription and the CLI signed in.
+
+A first run from nothing, end to end:
+
+```bash
+mkdir ~/video-notes                 # the output folder has to exist
+afterwatch settings                 # Notes: gemini + a model name, paste the key, Output: obsidian or markdown + ~/video-notes, Save
+afterwatch add https://www.youtube.com/watch?v=VIDEO_ID
+```
+
+The note lands in `~/video-notes/Videos/`. More at once:
+
 ```bash
 afterwatch add https://www.youtube.com/watch?v=VIDEO_ID
 afterwatch add links.txt
@@ -196,6 +210,7 @@ Afterwatch makes one to three calls per video: one for the note and, when screen
 - API keys and tokens are never written to the config file or to logs. The settings page only shows whether a key is set; it can replace or remove a key but never displays it.
 - The settings page listens on `127.0.0.1` only, on a random port, and every request must carry a random token that is created for that session and printed with the URL. Requests with a foreign `Host` or `Origin` are refused, and the page loads nothing from the internet.
 - Afterwatch never asks for, stores or forwards a YouTube, Google, Claude or ChatGPT login and reads no browser cookies.
+- With the `claude-code` provider, the CLI runs without any tools and without your MCP servers; only screenshot checks get the Read tool, to open the images. Text inside a transcript therefore can't make it run commands, change files or reach other services.
 - Your transcripts and video details go to the AI provider you choose, and nowhere else. Notion output goes to your Notion workspace through your own integration token.
 
 ## Terms of service and the law

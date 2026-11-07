@@ -9,11 +9,15 @@ from . import config
 
 # Windows-invalid chars plus Obsidian-reserved ones (# ^ [ ] |)
 _INVALID = re.compile(r'[<>:"/\\|?*#^\[\]\x00-\x1f]')
+# Device names Windows refuses as file names, with or without an extension
+_RESERVED = re.compile(r"CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9]", re.IGNORECASE)
 
 
 def sanitize_filename(title: str) -> str:
     name = _INVALID.sub("", title)
     name = name.strip(" .")
+    if _RESERVED.fullmatch(name.split(".")[0].rstrip()):
+        name = "_" + name
     return name or "Untitled"
 
 

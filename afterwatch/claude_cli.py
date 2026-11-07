@@ -50,8 +50,12 @@ class CliError(ClaudeCliError):
     """Any other CLI failure."""
 
 
-def build_command(model: str = DEFAULT_CLI_MODEL) -> list[str]:
-    return ["claude", "-p", "--output-format", "json", "--model", model]
+def build_command(model: str = DEFAULT_CLI_MODEL, tools: str = "") -> list[str]:
+    """``tools``: built-in tools the run may use ("" = none). Transcripts are
+    untrusted text, so a run never gets Bash, Write, web or MCP tools that a
+    prompt injection could turn against the user's machine."""
+    return ["claude", "-p", "--output-format", "json", "--model", model,
+            "--tools", tools, "--strict-mcp-config"]
 
 
 def child_env() -> dict[str, str]:
@@ -91,11 +95,11 @@ def classify_failure(returncode, envelope, stderr):
 
 
 def invoke_once(prompt: str, *, cwd: Path, model: str = DEFAULT_CLI_MODEL,
-                timeout: int = DEFAULT_TIMEOUT) -> str:
+                timeout: int = DEFAULT_TIMEOUT, tools: str = "") -> str:
     """One CLI attempt. Returns the assistant text, or raises a typed error."""
     try:
         proc = subprocess.run(
-            build_command(model),
+            build_command(model, tools),
             input=prompt,               # stdin, never argv
             capture_output=True,
             text=True,
@@ -213,7 +217,7 @@ def record_attempt(today: str | None = None) -> int:
 
 
 def run_claude(prompt: str, *, cwd: Path, model: str = DEFAULT_CLI_MODEL,
-               timeout: int = DEFAULT_TIMEOUT) -> str:
+               timeout: int = DEFAULT_TIMEOUT, tools: str = "") -> str:
     """Run the CLI with the retry policy. Raises a typed ClaudeCliError.
 
     Quota refusals get a long back-off (the subscription window has to reset);
@@ -231,7 +235,7 @@ def run_claude(prompt: str, *, cwd: Path, model: str = DEFAULT_CLI_MODEL,
                 "resets at local midnight"
             )
         try:
-            return invoke_once(prompt, cwd=cwd, model=model, timeout=timeout)
+            return invoke_once(prompt, cwd=cwd, model=model, timeout=timeout, tools=tools)
         except AuthFailure as exc:
             # A human has to re-login; retrying only burns the daily budget.
             print(f"claude CLI auth failure — run `claude` and /login: {exc}",

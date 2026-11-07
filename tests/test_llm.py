@@ -141,7 +141,7 @@ def _capture_cli(monkeypatch, reply="out"):
     seen = {}
 
     def fake_run_claude(prompt, *, cwd, model, **kw):
-        seen.update(prompt=prompt, model=model,
+        seen.update(prompt=prompt, model=model, tools=kw.get("tools"),
                     files={p.name: p.read_bytes() for p in cwd.iterdir()})
         return reply
 
@@ -171,3 +171,15 @@ def test_claude_code_writes_images_and_names_them_in_order(monkeypatch):
     p = seen["prompt"]
     assert p.index("first:") < p.index("image1.png") < p.index("second:") < p.index("image2.jpg")
     assert p.rstrip().endswith("TASK")
+
+
+def test_claude_code_text_call_gets_no_tools(monkeypatch):
+    seen = _capture_cli(monkeypatch)
+    llm.complete("notes", "P", cfg=make_cfg("claude-code:sonnet"))
+    assert seen["tools"] == ""
+
+
+def test_claude_code_image_call_gets_only_read(monkeypatch):
+    seen = _capture_cli(monkeypatch)
+    llm.complete("vision", "TASK", images=[("first:", PNG)], cfg=make_cfg("claude-code:sonnet"))
+    assert seen["tools"] == "Read"
