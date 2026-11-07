@@ -137,7 +137,7 @@ Every step can be stopped and rerun; it picks up where it left off. Videos with 
 
 ### Keeping hubs current
 
-On the Obsidian and Markdown targets, `afterwatch add` and `afterwatch backfill summarise` update the hubs on their own once 7 days have passed since the last update (both numbers are settings). To update on a schedule instead, run `afterwatch hubs` from your system's scheduler: Task Scheduler on Windows, `cron` or a launchd agent on macOS and Linux. The Discord bot does it weekly by itself.
+On the Obsidian and Markdown targets, `afterwatch add` and `afterwatch backfill summarise` update the hubs on their own once 7 days have passed since the last update, writing at most 10 hubs per run (both numbers are settings). To update on a schedule instead, run `afterwatch hubs` from your system's scheduler: Task Scheduler on Windows, `cron` or a launchd agent on macOS and Linux. The Discord bot does it weekly by itself.
 
 ### Discord bot
 
