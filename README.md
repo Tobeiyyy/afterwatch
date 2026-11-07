@@ -18,11 +18,11 @@ Before writing, Afterwatch reads the tags already in your vault and tells the mo
 
 ### Screenshots only where they help
 
-A model looks at a contact sheet of the whole video and decides whether it shows anything worth keeping: slides, charts, code, diagrams. Candidate frames are then captured at full resolution and checked a second time; blurry frames and talking heads are thrown away. Most videos end up with none. Kept frames are saved as 1280 px JPGs.
+A model looks at a contact sheet of the whole video and decides whether it shows anything worth keeping: slides, charts, code, diagrams. Candidate frames are then captured at full resolution and checked again; blurry frames and talking heads are dropped. Most videos end up with none. Kept frames are saved as 1280 px JPGs.
 
 ### Topic hubs that keep themselves current
 
-Each note gets one topic: its most specific tag that at least 5 notes share. A topic of up to 15 notes becomes one hub page; bigger topics are split into themes. A hub is organised by claim: what several videos agree on, where they disagree, which take is strongest, with links to the notes each claim came from. When new notes join, the hub is rewritten after 3 of them; when it grows past 15 it is split and the old page points to the new ones. Text you write outside the generated block is never touched.
+Each note gets one topic: its most specific tag that at least 5 notes share. A topic of up to 15 notes becomes one hub page; bigger topics are split into themes. A hub is organised by claim: what several videos agree on, where they disagree, which take is strongest, with links to the notes each claim came from. A hub is rewritten after 3 new notes join; past 15 it is split and the old page points to the new ones. Text you write outside the generated block is never touched.
 
 ![A topic hub](https://raw.githubusercontent.com/Tobeiyyy/afterwatch/main/docs/screenshots/hub.png)
 
@@ -34,11 +34,11 @@ Each note gets one topic: its most specific tag that at least 5 notes share. A t
 
 ### Your whole watch history
 
-`afterwatch backfill` reads a Google Takeout export of your YouTube history, drops what isn't worth a note (short videos, Shorts, music, channels you list, videos you already have), optionally lets a model judge the rest from title and description, shows you a sample of what it kept and cut, and then writes notes in resumable batches.
+`afterwatch backfill` reads a Google Takeout export of your YouTube history and drops what isn't worth a note (short videos, Shorts, music, channels you list, videos you already have). A model can optionally judge the rest from title and description. You see a sample of what was kept and cut, then it writes notes in resumable batches.
 
 ### A settings page
 
-`afterwatch settings` opens every option in your browser: which model does which job, note length and style, language, screenshots, output, folders, hubs, backfill and the bot. It opens in dark mode; the Light mode button at the top switches it, and the choice is saved.
+`afterwatch settings` opens every option in your browser: which model does which job, note length and style, language, screenshots, output, folders, hubs, backfill and the bot. It opens in dark mode; the Light mode button at the top switches it and saves the choice.
 
 ![The settings page](https://raw.githubusercontent.com/Tobeiyyy/afterwatch/main/docs/screenshots/settings.png)
 
@@ -52,7 +52,7 @@ Paste links into a channel and the bot replies with the result of each; once a w
 - [ffmpeg](https://ffmpeg.org/download.html) on your PATH, for screenshots
 - A JavaScript runtime for yt-dlp: [Deno](https://deno.com), Node.js or QuickJS. Afterwatch enables whichever is installed; without one, yt-dlp warns that some formats may be missing.
 - An AI model: an API key for one of the providers above, a local Ollama, or the [Claude Code](https://docs.claude.com/en/docs/claude-code) CLI installed and signed in
-- Videos need captions (manual or auto-generated). Videos without any are skipped and listed in the failure note.
+- Videos need captions (manual or auto-generated). Videos without them are skipped and listed in the failure note.
 
 ## Install
 
@@ -85,11 +85,11 @@ Each provider has a Test button that sends one tiny request.
 
 ## Use
 
-Before the first run, two things must be in place, or `afterwatch add` stops with an error: a notes model with its API key (see Set up), and an output folder that already exists. Afterwatch creates the subfolders inside it, not the folder itself.
+`afterwatch add` stops with an error unless two things are in place: a notes model with its API key (see Set up), and an output folder that already exists. Afterwatch creates the subfolders inside it, not the folder itself.
 
 The cheapest way to start is a free Gemini API key from Google AI Studio (free tier, see Models and costs), or the `claude-code` provider if you already have a Claude subscription and the CLI signed in.
 
-A first run from nothing, end to end:
+A first run from scratch:
 
 ```bash
 mkdir ~/video-notes                 # the output folder has to exist
@@ -133,7 +133,7 @@ Other commands:
 5. `afterwatch backfill report`, and read the sample. `summarise` refuses to start until you have run `report` once.
 6. `afterwatch backfill summarise --until-done`
 
-Every step can be stopped and rerun; it continues where it stopped. Videos with no transcript are remembered and skipped next time. If YouTube starts throttling, the run stops instead of marking videos as dead.
+Every step can be stopped and rerun; it picks up where it left off. Videos with no transcript are remembered and skipped next time. If YouTube starts throttling, the run stops instead of marking videos as dead.
 
 ### Keeping hubs current
 
@@ -141,7 +141,7 @@ On the Obsidian and Markdown targets, `afterwatch add` and `afterwatch backfill 
 
 ### Discord bot
 
-Afterwatch doesn't come with a bot account: you create your own bot once (free, a few minutes) and it runs on your computer. It only works while `afterwatch bot` is running, so it suits a PC or small server that stays on.
+Afterwatch has no bot account of its own: you create one once (free, a few minutes) and it runs on your computer. It works only while `afterwatch bot` is running, so it suits a PC or small server that stays on.
 
 1. **Create the bot.** In the [Discord Developer Portal](https://discord.com/developers/applications), create a new application, give it a name and press **Create** ([Discord's guide](https://docs.discord.com/developers/quick-start/getting-started)).
 2. **Copy the token.** On the **Bot** page, under **Token**, click **Reset Token** and copy it. Discord shows it only once.
@@ -151,7 +151,7 @@ Afterwatch doesn't come with a bot account: you create your own bot once (free, 
 6. In `afterwatch settings` → **Bot**, paste the token and the channel ID, then **Save**.
 7. Run `afterwatch bot`.
 
-Paste YouTube links into that channel and the bot writes the notes, replies with the result and reacts with ✅, ♻️ (already a note) or ❌. On start it also catches up on links from the last 14 days that it hasn't answered yet. Once a week it updates the hubs and posts the ones it wrote.
+Paste YouTube links into that channel and the bot writes the notes, replies with the result and reacts with ✅, ♻️ (already a note) or ❌. On start it also answers any links from the last 14 days it missed. Once a week it updates the hubs and posts the ones it wrote.
 
 ## Settings
 
@@ -193,7 +193,7 @@ Hubs and the reading order need the notes as local Markdown, so they are only av
 
 ## Models and costs
 
-Afterwatch makes one to three calls per video: one for the note and, when screenshots are on, one vision call to decide whether the video is visual and a second to check the frames it captured. Hubs and backfill judging add a few calls per run. Every call, retries included, counts against the daily cap, so a run stops cleanly at the cap instead of spending without limit.
+Afterwatch makes one to three calls per video: one for the note and, when screenshots are on, one vision call to decide whether the video is visual and a second to check the frames it captured. Hubs and backfill judging add a few calls per run. Every call, retries included, counts against the daily cap, so a run stops at the cap instead of spending without limit.
 
 **API keys** are read from the provider's usual environment variable (`OPENAI_API_KEY`, `GEMINI_API_KEY`, `ANTHROPIC_API_KEY`, `XAI_API_KEY`, `DEEPSEEK_API_KEY`, `OPENROUTER_API_KEY`), from `AFTERWATCH_<PROVIDER>_KEY`, or from your system's credential store (Windows Credential Manager, macOS Keychain, Secret Service on Linux), which is where the settings page puts them.
 
@@ -208,10 +208,10 @@ Afterwatch makes one to three calls per video: one for the note and, when screen
 ## Security and privacy
 
 - API keys and tokens are never written to the config file or to logs. The settings page only shows whether a key is set; it can replace or remove a key but never displays it.
-- The settings page listens on `127.0.0.1` only, on a random port, and every request must carry a random token that is created for that session and printed with the URL. Requests with a foreign `Host` or `Origin` are refused, and the page loads nothing from the internet.
+- The settings page listens on `127.0.0.1` only, on a random port, and every request must carry a random per-session token, printed with the URL. Requests with a foreign `Host` or `Origin` are refused, and the page loads nothing from the internet.
 - Afterwatch never asks for, stores or forwards a YouTube, Google, Claude or ChatGPT login and reads no browser cookies.
-- With the `claude-code` provider, the CLI runs without any tools and without your MCP servers; only screenshot checks get the Read tool, to open the images. Text inside a transcript therefore can't make it run commands, change files or reach other services.
-- Your transcripts and video details go to the AI provider you choose, and nowhere else. Notion output goes to your Notion workspace through your own integration token.
+- With the `claude-code` provider, the CLI runs without any tools and without your MCP servers; only screenshot checks get the Read tool, to open the images. So text inside a transcript can't make it run commands, change files or reach other services.
+- Your transcripts and video details go only to the AI provider you choose. Notion output goes to your Notion workspace through your own integration token.
 
 ## Terms of service and the law
 
